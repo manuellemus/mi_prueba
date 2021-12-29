@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\backend;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Employee;
 
-class ContentController extends Controller
+use App\Http\Controllers\Controller;
+use App\Http\Requests\EmployeRequest;
+use Illuminate\Support\Facades\DB;
+
+class PeopleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +17,9 @@ class ContentController extends Controller
      */
     public function index()
     {
-        return view('content.index');
+        $employees = Employee::latest()->paginate(3);
+
+        return view('content.index', compact('employees'));
     }
 
     /**
@@ -33,20 +38,22 @@ class ContentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(EmployeRequest $request)
     {
-        //
+        //dd($request->all());
+        //salvar
+        $post = Employee::create($request->all());
+
+        //retornar
+        return back()->with('status', 'Creado con exito');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+ 
     public function edit($id)
     {
-        //
+    
+        $employee = Employee::find($id);
+        return view('content.edit', compact('employee'));
     }
 
     /**
@@ -56,9 +63,12 @@ class ContentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(EmployeRequest $request, $id)
     {
-        //
+        $employee = Employee::find($id);
+        $employee->update($request->all());
+
+        return back()->with('status', 'Actualizado con exito');
     }
 
     /**
@@ -69,6 +79,9 @@ class ContentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $employee = Employee::find($id);
+        $employee->delete();
+
+        return back()->with('status', 'Eliminado correctamente');
     }
 }

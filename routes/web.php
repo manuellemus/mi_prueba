@@ -17,5 +17,5 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::resource('mi-prueba', 'Backend\ContentController')->except('show');
+Route::resource('mi-prueba', 'backend\PeopleController')->except('show');
 
