@@ -17,7 +17,7 @@ class PeopleController extends Controller
      */
     public function index()
     {
-        $employees = Employee::latest()->paginate(3);
+        $employees = Employee::latest()->paginate(5);
 
         return view('content.index', compact('employees'));
     }
